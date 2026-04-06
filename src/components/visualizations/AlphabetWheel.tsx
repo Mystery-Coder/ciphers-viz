@@ -79,17 +79,21 @@ export const AlphabetWheel = ({ shift }: AlphabetWheelProps) => {
 						const ix = center + Math.cos(angle) * innerRadius;
 						const iy = center + Math.sin(angle) * innerRadius;
 						return (
-							<text
+							<g
 								key={`inner-${char}`}
-								x={ix}
-								y={iy}
-								textAnchor="middle"
-								dominantBaseline="middle"
-								fill="#a8d4ff"
-								fontSize="10"
+								transform={`translate(${ix} ${iy}) rotate(${-rotationDeg})`}
 							>
-								{char}
-							</text>
+								<text
+									x={0}
+									y={0}
+									textAnchor="middle"
+									dominantBaseline="middle"
+									fill="#a8d4ff"
+									fontSize="10"
+								>
+									{char}
+								</text>
+							</g>
 						);
 					})}
 				</g>
