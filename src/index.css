@@ -1,0 +1,65 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		color: #a8d4ff;
+		background: #0d1b2e;
+		font-family: Inter, sans-serif;
+		font-synthesis: none;
+		text-rendering: geometricPrecision;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		margin: 0;
+		min-height: 100vh;
+		background: #0d1b2e;
+	}
+
+	input,
+	textarea,
+	button,
+	select,
+	table {
+		font-family: "JetBrains Mono", monospace;
+	}
+}
+
+@layer components {
+	.blueprint-grid {
+		background-color: #0d1b2e;
+		background-image:
+			linear-gradient(rgba(100, 180, 255, 0.07) 1px, transparent 1px),
+			linear-gradient(
+				90deg,
+				rgba(100, 180, 255, 0.07) 1px,
+				transparent 1px
+			);
+		background-size: 24px 24px;
+		background-position: center center;
+	}
+
+	.flash-cell {
+		animation: flash 450ms ease-out;
+	}
+
+	.animate-fade-in {
+		animation: fadeIn 220ms ease-out;
+	}
+
+	.animate-slide-in {
+		animation: slideIn 200ms ease-out;
+	}
+}
