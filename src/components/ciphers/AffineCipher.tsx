@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { decrypt, encrypt } from "../../ciphers/affine";
 import type { CipherMode } from "../../ciphers/types";
+import { useAnimatedString } from "../../hooks/useAnimatedString";
 import { StepTable } from "../StepTable";
 import { DualTransform } from "../visualizations/DualTransform";
 
@@ -17,6 +18,7 @@ export const AffineCipher = () => {
 				: decrypt(text, { a, b }),
 		[text, a, b, mode],
 	);
+	const { displayed, done } = useAnimatedString(data.result, 25);
 
 	return (
 		<div className="space-y-4">
@@ -88,7 +90,8 @@ export const AffineCipher = () => {
 				</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<div className="flex-1 border border-bp-border bg-bp-bg px-3 py-2 font-mono text-bp-pale">
-						{data.result}
+						{displayed}
+						{!done ? <span className="blink-cursor">|</span> : null}
 					</div>
 					<button
 						type="button"
@@ -102,7 +105,7 @@ export const AffineCipher = () => {
 				</div>
 			</div>
 
-			<StepTable steps={data.steps} />
+			<StepTable steps={data.steps} resultString={data.result} />
 		</div>
 	);
 };

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { decrypt, encrypt } from "../../ciphers/vigenere";
 import type { CipherMode } from "../../ciphers/types";
+import { useAnimatedString } from "../../hooks/useAnimatedString";
 import { StepTable } from "../StepTable";
 import { VigenereSquare } from "../visualizations/VigenereSquare";
 
@@ -12,7 +13,6 @@ export const VigenereCipher = () => {
 	const [text, setText] = useState("ATTACK AT DAWN");
 	const [keyword, setKeyword] = useState("LEMON");
 	const [mode, setMode] = useState<CipherMode>("encrypt");
-	const [stepCursor, setStepCursor] = useState(0);
 
 	const data = useMemo(
 		() =>
@@ -24,9 +24,11 @@ export const VigenereCipher = () => {
 
 	const cleanText = alphaOnly(text);
 	const cleanKey = alphaOnly(keyword);
-	const activeCol = cleanText[stepCursor] ? idx(cleanText[stepCursor]) : 0;
+	const lastIndex = Math.max(cleanText.length - 1, 0);
+	const activeCol = cleanText[lastIndex] ? idx(cleanText[lastIndex]) : 0;
 	const activeRow =
-		cleanKey.length > 0 ? idx(cleanKey[stepCursor % cleanKey.length]) : 0;
+		cleanKey.length > 0 ? idx(cleanKey[lastIndex % cleanKey.length]) : 0;
+	const { displayed, done } = useAnimatedString(data.result, 25);
 
 	return (
 		<div className="space-y-4">
@@ -75,30 +77,6 @@ export const VigenereCipher = () => {
 				</div>
 			) : null}
 
-			<div className="border border-bp-border bg-bp-panel p-3">
-				<div className="mb-2 flex items-center justify-between text-xs text-bp-dim">
-					<span>STEP HIGHLIGHT</span>
-					<span>
-						{Math.min(
-							stepCursor + 1,
-							Math.max(data.steps.length, 1),
-						)}{" "}
-						/ {Math.max(data.steps.length, 1)}
-					</span>
-				</div>
-				<input
-					type="range"
-					min={0}
-					max={Math.max(data.steps.length - 1, 0)}
-					value={Math.min(
-						stepCursor,
-						Math.max(data.steps.length - 1, 0),
-					)}
-					onChange={(e) => setStepCursor(Number(e.target.value))}
-					className="w-full accent-[#64b4ff]"
-				/>
-			</div>
-
 			<VigenereSquare activeRow={activeRow} activeCol={activeCol} />
 
 			<div className="border border-bp-border bg-bp-panel p-4">
@@ -107,7 +85,8 @@ export const VigenereCipher = () => {
 				</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<div className="flex-1 border border-bp-border bg-bp-bg px-3 py-2 font-mono text-bp-pale">
-						{data.result}
+						{displayed}
+						{!done ? <span className="blink-cursor">|</span> : null}
 					</div>
 					<button
 						type="button"
@@ -121,7 +100,7 @@ export const VigenereCipher = () => {
 				</div>
 			</div>
 
-			<StepTable steps={data.steps} />
+			<StepTable steps={data.steps} resultString={data.result} />
 		</div>
 	);
 };

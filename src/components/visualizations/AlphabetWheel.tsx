@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -9,12 +9,24 @@ type AlphabetWheelProps = {
 export const AlphabetWheel = ({ shift }: AlphabetWheelProps) => {
 	const radius = 88;
 	const center = 112;
+	const innerRadius = radius - 24;
 	const cleanShift = ((shift % 26) + 26) % 26;
+	const degreesPerStep = 360 / 26;
+	const previousShiftRef = useRef(cleanShift);
+	const [rotationDeg, setRotationDeg] = useState(cleanShift * degreesPerStep);
 
-	const mapped = useMemo(
-		() => letters.map((_, i) => letters[(i + cleanShift) % 26]),
-		[cleanShift],
-	);
+	useEffect(() => {
+		const previous = previousShiftRef.current;
+		let delta = cleanShift - previous;
+		if (delta > 13) {
+			delta -= 26;
+		}
+		if (delta < -13) {
+			delta += 26;
+		}
+		setRotationDeg((prev) => prev + delta * degreesPerStep);
+		previousShiftRef.current = cleanShift;
+	}, [cleanShift, degreesPerStep]);
 
 	return (
 		<div className="border border-bp-border bg-bp-panel p-4">
@@ -32,7 +44,7 @@ export const AlphabetWheel = ({ shift }: AlphabetWheelProps) => {
 				<circle
 					cx={center}
 					cy={center}
-					r={radius - 24}
+					r={innerRadius}
 					fill="none"
 					stroke="rgba(100,180,255,0.25)"
 				/>
@@ -40,8 +52,6 @@ export const AlphabetWheel = ({ shift }: AlphabetWheelProps) => {
 					const angle = (i / 26) * Math.PI * 2 - Math.PI / 2;
 					const x = center + Math.cos(angle) * radius;
 					const y = center + Math.sin(angle) * radius;
-					const ix = center + Math.cos(angle) * (radius - 24);
-					const iy = center + Math.sin(angle) * (radius - 24);
 					return (
 						<g key={char}>
 							<text
@@ -54,7 +64,23 @@ export const AlphabetWheel = ({ shift }: AlphabetWheelProps) => {
 							>
 								{char}
 							</text>
+						</g>
+					);
+				})}
+				<g
+					style={{
+						transformOrigin: `${center}px ${center}px`,
+						transform: `rotate(${rotationDeg}deg)`,
+						transition: "transform 500ms ease-in-out",
+					}}
+				>
+					{letters.map((char, i) => {
+						const angle = (i / 26) * Math.PI * 2 - Math.PI / 2;
+						const ix = center + Math.cos(angle) * innerRadius;
+						const iy = center + Math.sin(angle) * innerRadius;
+						return (
 							<text
+								key={`inner-${char}`}
 								x={ix}
 								y={iy}
 								textAnchor="middle"
@@ -62,11 +88,11 @@ export const AlphabetWheel = ({ shift }: AlphabetWheelProps) => {
 								fill="#a8d4ff"
 								fontSize="10"
 							>
-								{mapped[i]}
+								{char}
 							</text>
-						</g>
-					);
-				})}
+						);
+					})}
+				</g>
 			</svg>
 		</div>
 	);

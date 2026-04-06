@@ -62,4 +62,90 @@
 	.animate-slide-in {
 		animation: slideIn 200ms ease-out;
 	}
+
+	.cell-flash {
+		animation: cellFlash 400ms ease-out;
+	}
+
+	.stagger-row {
+		animation-name: rowReveal;
+		animation-duration: 260ms;
+		animation-timing-function: ease-out;
+		animation-fill-mode: both;
+	}
+
+	.key-tape-cell {
+		animation: tapeAppend 200ms ease-out both;
+	}
+
+	.crosshair-cell {
+		transition: background-color 150ms ease;
+	}
+
+	.intersect-pulse {
+		animation: intersectPulse 300ms ease-out;
+	}
+
+	.blink-cursor {
+		animation: blink 1s step-end infinite;
+	}
+
+	.matrix-pulse {
+		transition:
+			background-color 120ms ease,
+			border-color 120ms ease;
+	}
+}
+
+@keyframes cellFlash {
+	0% {
+		background-color: rgba(100, 180, 255, 0.35);
+	}
+	100% {
+		background-color: transparent;
+	}
+}
+
+@keyframes rowReveal {
+	0% {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes tapeAppend {
+	0% {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes intersectPulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.15);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
 }

@@ -5,6 +5,7 @@ import {
 	multiplicationTableMod26,
 } from "../../ciphers/multiplicative";
 import type { CipherMode } from "../../ciphers/types";
+import { useAnimatedString } from "../../hooks/useAnimatedString";
 import { StepTable } from "../StepTable";
 import { MappingGrid } from "../visualizations/MappingGrid";
 
@@ -22,6 +23,7 @@ export const MultiplicativeCipher = () => {
 	);
 
 	const mapping = useMemo(() => multiplicationTableMod26(factor), [factor]);
+	const { displayed, done } = useAnimatedString(data.result, 25);
 
 	return (
 		<div className="space-y-4">
@@ -94,7 +96,8 @@ export const MultiplicativeCipher = () => {
 				</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<div className="flex-1 border border-bp-border bg-bp-bg px-3 py-2 font-mono text-bp-pale">
-						{data.result}
+						{displayed}
+						{!done ? <span className="blink-cursor">|</span> : null}
 					</div>
 					<button
 						type="button"
@@ -108,7 +111,7 @@ export const MultiplicativeCipher = () => {
 				</div>
 			</div>
 
-			<StepTable steps={data.steps} />
+			<StepTable steps={data.steps} resultString={data.result} />
 		</div>
 	);
 };

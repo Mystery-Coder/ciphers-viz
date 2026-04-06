@@ -6,6 +6,8 @@ import {
 	type Matrix2x2,
 } from "../../ciphers/hill";
 import type { CipherMode } from "../../ciphers/types";
+import { useAnimatedString } from "../../hooks/useAnimatedString";
+import { useMatrixPulse } from "../../hooks/useMatrixPulse";
 import { StepTable } from "../StepTable";
 import { MatrixTransform } from "../visualizations/MatrixTransform";
 
@@ -16,6 +18,7 @@ export const HillCipher = () => {
 		[3, 3],
 		[2, 5],
 	]);
+	const [showResultVector, setShowResultVector] = useState(true);
 
 	const data = useMemo(
 		() =>
@@ -26,6 +29,16 @@ export const HillCipher = () => {
 	);
 
 	const inverse = useMemo(() => inverseMatrixMod26(matrix), [matrix]);
+	const { displayed, done } = useAnimatedString(data.result, 25);
+	const { pulsingIndex, startPulse } = useMatrixPulse(4, () =>
+		setShowResultVector(true),
+	);
+	const { pulsingIndex: inversePulsingIndex, startPulse: startInversePulse } =
+		useMatrixPulse(4, () => setShowResultVector(true));
+	const resultVector = useMemo<[string, string]>(() => {
+		const pair = data.steps[0]?.cipherChar ?? "";
+		return [pair[0] ?? "?", pair[1] ?? "?"];
+	}, [data.steps]);
 
 	const setCell = (r: 0 | 1, c: 0 | 1, value: number) => {
 		setMatrix((prev) => {
@@ -93,14 +106,22 @@ export const HillCipher = () => {
 				<div className="flex items-start gap-2 md:justify-end">
 					<button
 						type="button"
-						onClick={() => setMode("encrypt")}
+						onClick={() => {
+							setMode("encrypt");
+							setShowResultVector(false);
+							startPulse();
+						}}
 						className={`border px-3 py-2 text-xs tracking-[0.12em] ${mode === "encrypt" ? "border-bp-accent bg-bp-glow text-bp-pale" : "border-bp-border text-bp-dim"}`}
 					>
 						ENCRYPT
 					</button>
 					<button
 						type="button"
-						onClick={() => setMode("decrypt")}
+						onClick={() => {
+							setMode("decrypt");
+							setShowResultVector(false);
+							startInversePulse();
+						}}
 						className={`border px-3 py-2 text-xs tracking-[0.12em] ${mode === "decrypt" ? "border-bp-accent bg-bp-glow text-bp-pale" : "border-bp-border text-bp-dim"}`}
 					>
 						DECRYPT
@@ -113,7 +134,14 @@ export const HillCipher = () => {
 					{data.error}
 				</div>
 			) : null}
-			<MatrixTransform matrix={matrix} inverse={inverse} />
+			<MatrixTransform
+				matrix={matrix}
+				inverse={inverse}
+				pulsingIndex={pulsingIndex}
+				inversePulsingIndex={inversePulsingIndex}
+				showResultVector={showResultVector}
+				resultVector={resultVector}
+			/>
 
 			<div className="border border-bp-border bg-bp-panel p-4">
 				<p className="mb-2 text-[10px] tracking-[0.15em] text-bp-dim">
@@ -121,7 +149,8 @@ export const HillCipher = () => {
 				</p>
 				<div className="flex flex-wrap items-center gap-2">
 					<div className="flex-1 border border-bp-border bg-bp-bg px-3 py-2 font-mono text-bp-pale">
-						{data.result}
+						{displayed}
+						{!done ? <span className="blink-cursor">|</span> : null}
 					</div>
 					<button
 						type="button"
@@ -135,7 +164,7 @@ export const HillCipher = () => {
 				</div>
 			</div>
 
-			<StepTable steps={data.steps} />
+			<StepTable steps={data.steps} resultString={data.result} />
 		</div>
 	);
 };
