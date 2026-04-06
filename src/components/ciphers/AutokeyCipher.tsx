@@ -75,7 +75,7 @@ export const AutokeyCipher = () => {
 			) : null}
 			<KeyTape
 				plain={plain}
-				key={tapeKey}
+				runningKey={tapeKey}
 				cipher={alphaOnly(data.result)}
 			/>
 

@@ -2,14 +2,14 @@ import { useMemo } from "react";
 
 type KeyTapeProps = {
 	plain: string;
-	key: string;
+	runningKey: string;
 	cipher: string;
 };
 
-export const KeyTape = ({ plain, key, cipher }: KeyTapeProps) => {
+export const KeyTape = ({ plain, runningKey, cipher }: KeyTapeProps) => {
 	const columns = useMemo(
-		() => Math.max(plain.length, key.length, cipher.length),
-		[plain, key, cipher],
+		() => Math.max(plain.length, runningKey.length, cipher.length),
+		[plain, runningKey, cipher],
 	);
 
 	const row = (
@@ -46,7 +46,7 @@ export const KeyTape = ({ plain, key, cipher }: KeyTapeProps) => {
 				RUNNING KEY TAPE
 			</p>
 			{row("PLAIN", plain, "pale")}
-			{row("KEY", key, "accent")}
+			{row("KEY", runningKey, "accent")}
 			{row("CIPHER", cipher, "pale")}
 		</div>
 	);
