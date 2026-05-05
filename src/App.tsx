@@ -6,6 +6,7 @@ import { AffineCipher } from "./components/ciphers/AffineCipher";
 import { AutokeyCipher } from "./components/ciphers/AutokeyCipher";
 import { HillCipher } from "./components/ciphers/HillCipher";
 import { MultiplicativeCipher } from "./components/ciphers/MultiplicativeCipher";
+import { PlayfairCipher } from "./components/ciphers/PlayfairCipher";
 import { VigenereCipher } from "./components/ciphers/VigenereCipher";
 
 const pages = [
@@ -14,6 +15,7 @@ const pages = [
 	"Affine Cipher",
 	"Autokey Cipher",
 	"Vigenere Cipher",
+	"Playfair Cipher",
 	"Hill Cipher",
 ] as const;
 
@@ -51,14 +53,21 @@ function App() {
 						"Seed key starts the stream, then plaintext extends the running key tape.",
 					node: <AutokeyCipher />,
 				};
-			case "Vigenere Cipher":
-				return {
-					title: "Vigenere Cipher",
-					description:
-						"Repeat a keyword against plaintext and index into tabula recta per character.",
-					node: <VigenereCipher />,
-				};
-			case "Hill Cipher":
+		case "Vigenere Cipher":
+			return {
+				title: "Vigenere Cipher",
+				description:
+					"Repeat a keyword against plaintext and index into tabula recta per character.",
+				node: <VigenereCipher />,
+			};
+		case "Playfair Cipher":
+			return {
+				title: "Playfair Cipher",
+				description:
+					"Encrypt digraphs using a 5x5 keyword square with row, column, and rectangle rules.",
+				node: <PlayfairCipher />,
+			};
+		case "Hill Cipher":
 				return {
 					title: "Hill Cipher",
 					description:
