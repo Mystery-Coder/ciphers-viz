@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CipherLayout } from "./components/CipherLayout";
 import { Sidebar } from "./components/Sidebar";
 import { AdditiveCipher } from "./components/ciphers/AdditiveCipher";
@@ -23,9 +23,40 @@ const pages = [
 	"DES Cipher",
 ] as const;
 
+const themes = [
+	{ id: "blueprint", label: "Blueprint" },
+	{ id: "forge", label: "Cipher Forge" },
+	{ id: "parchment", label: "Archive Parchment" },
+	{ id: "hackerman", label: "Hackerman" },
+] as const;
+
+type ThemeId = (typeof themes)[number]["id"];
+
+const getStoredTheme = (): ThemeId => {
+	if (typeof window === "undefined") {
+		return "blueprint";
+	}
+
+	const stored = window.localStorage.getItem("cipher-theme");
+	const mapped =
+		stored === "reef"
+			? "hackerman"
+			: stored === "verdant" || stored === "dossier"
+				? "blueprint"
+				: stored;
+	const match = themes.find((theme) => theme.id === mapped);
+	return match ? match.id : "blueprint";
+};
+
 function App() {
 	const [active, setActive] =
 		useState<(typeof pages)[number]>("Additive Cipher");
+	const [theme, setTheme] = useState<ThemeId>(getStoredTheme);
+
+	useEffect(() => {
+		document.documentElement.dataset.theme = theme;
+		window.localStorage.setItem("cipher-theme", theme);
+	}, [theme]);
 
 	const content = useMemo(() => {
 		switch (active) {
@@ -104,7 +135,14 @@ function App() {
 	return (
 		<div className="min-h-screen bg-bp-bg text-bp-pale">
 			<div className="mx-auto flex min-h-screen max-w-[1400px] flex-col border-x border-x-bp-border md:flex-row">
-				<Sidebar items={pages} active={active} onSelect={setActive} />
+				<Sidebar
+					items={pages}
+					active={active}
+					onSelect={setActive}
+					themes={themes}
+					activeTheme={theme}
+					onThemeChange={setTheme}
+				/>
 				<main className="blueprint-grid flex-1">
 					<CipherLayout
 						title={content.title}

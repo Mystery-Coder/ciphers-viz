@@ -2,6 +2,14 @@
 @import "@fontsource/inter/600.css";
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/600.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/lexend/400.css";
+@import "@fontsource/lexend/600.css";
+@import "@fontsource/sora/400.css";
+@import "@fontsource/sora/600.css";
 
 @tailwind base;
 @tailwind components;
@@ -9,13 +17,68 @@
 
 @layer base {
 	:root {
-		color: #a8d4ff;
-		background: #0d1b2e;
-		font-family: Inter, sans-serif;
+		--bp-bg: #0d1b2e;
+		--bp-panel: #0f2039;
+		--bp-border: rgba(100, 180, 255, 0.25);
+		--bp-accent: #64b4ff;
+		--bp-pale: #a8d4ff;
+		--bp-dim: rgba(100, 180, 255, 0.4);
+		--bp-glow: rgba(100, 180, 255, 0.15);
+		--bp-grid: rgba(100, 180, 255, 0.07);
+		--font-ui: "Inter", sans-serif;
+		--font-mono: "JetBrains Mono", monospace;
+		--accent: var(--bp-accent);
+		--accent-bg: var(--bp-glow);
+		--accent-border: var(--bp-accent);
+		--border: var(--bp-border);
+		--text-h: var(--bp-pale);
+		--social-bg: var(--bp-panel);
+		--shadow: 0 0 0 1px var(--bp-border);
+		color-scheme: dark;
+		color: var(--bp-pale);
+		background: var(--bp-bg);
+		font-family: var(--font-ui);
 		font-synthesis: none;
 		text-rendering: geometricPrecision;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+	}
+
+	:root[data-theme="forge"] {
+		--bp-bg: #0b0b10;
+		--bp-panel: #15151c;
+		--bp-border: rgba(255, 177, 93, 0.28);
+		--bp-accent: #ff9f1c;
+		--bp-pale: #f8e7c6;
+		--bp-dim: rgba(255, 177, 93, 0.5);
+		--bp-glow: rgba(255, 159, 28, 0.16);
+		--bp-grid: rgba(255, 177, 93, 0.08);
+		--font-ui: "IBM Plex Sans", sans-serif;
+	}
+
+	:root[data-theme="parchment"] {
+		--bp-bg: #f6efe6;
+		--bp-panel: #fffaf3;
+		--bp-border: rgba(119, 94, 70, 0.35);
+		--bp-accent: #6a3b1f;
+		--bp-pale: #2e2317;
+		--bp-dim: rgba(72, 54, 39, 0.65);
+		--bp-glow: rgba(106, 59, 31, 0.12);
+		--bp-grid: rgba(106, 59, 31, 0.08);
+		--font-ui: "Cormorant Garamond", serif;
+		color-scheme: light;
+	}
+
+	:root[data-theme="hackerman"] {
+		--bp-bg: #050a06;
+		--bp-panel: #0a1410;
+		--bp-border: rgba(82, 255, 122, 0.28);
+		--bp-accent: #52ff7a;
+		--bp-pale: #d5ffe3;
+		--bp-dim: rgba(82, 255, 122, 0.5);
+		--bp-glow: rgba(82, 255, 122, 0.16);
+		--bp-grid: rgba(82, 255, 122, 0.08);
+		--font-ui: "JetBrains Mono", monospace;
 	}
 
 	* {
@@ -25,7 +88,10 @@
 	body {
 		margin: 0;
 		min-height: 100vh;
-		background: #0d1b2e;
+		background: var(--bp-bg);
+		transition:
+			background-color 220ms ease,
+			color 220ms ease;
 	}
 
 	input,
@@ -33,20 +99,16 @@
 	button,
 	select,
 	table {
-		font-family: "JetBrains Mono", monospace;
+		font-family: var(--font-mono);
 	}
 }
 
 @layer components {
 	.blueprint-grid {
-		background-color: #0d1b2e;
+		background-color: var(--bp-bg);
 		background-image:
-			linear-gradient(rgba(100, 180, 255, 0.07) 1px, transparent 1px),
-			linear-gradient(
-				90deg,
-				rgba(100, 180, 255, 0.07) 1px,
-				transparent 1px
-			);
+			linear-gradient(var(--bp-grid) 1px, transparent 1px),
+			linear-gradient(90deg, var(--bp-grid) 1px, transparent 1px);
 		background-size: 24px 24px;
 		background-position: center center;
 	}

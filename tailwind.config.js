@@ -5,18 +5,18 @@ export default {
 		extend: {
 			colors: {
 				bp: {
-					bg: "#0d1b2e",
-					panel: "#0f2039",
-					border: "rgba(100,180,255,0.25)",
-					accent: "#64b4ff",
-					pale: "#a8d4ff",
-					dim: "rgba(100,180,255,0.4)",
-					glow: "rgba(100,180,255,0.15)",
+					bg: "var(--bp-bg)",
+					panel: "var(--bp-panel)",
+					border: "var(--bp-border)",
+					accent: "var(--bp-accent)",
+					pale: "var(--bp-pale)",
+					dim: "var(--bp-dim)",
+					glow: "var(--bp-glow)",
 				},
 			},
 			fontFamily: {
-				ui: ["Inter", "sans-serif"],
-				mono: ['"JetBrains Mono"', "monospace"],
+				ui: ["var(--font-ui)"],
+				mono: ["var(--font-mono)"],
 			},
 			keyframes: {
 				flash: {
