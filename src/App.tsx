@@ -8,6 +8,8 @@ import { HillCipher } from "./components/ciphers/HillCipher";
 import { MultiplicativeCipher } from "./components/ciphers/MultiplicativeCipher";
 import { PlayfairCipher } from "./components/ciphers/PlayfairCipher";
 import { VigenereCipher } from "./components/ciphers/VigenereCipher";
+import { AesCipher } from "./components/ciphers/AesCipher";
+import { DesCipher } from "./components/ciphers/DesCipher";
 
 const pages = [
 	"Additive Cipher",
@@ -17,6 +19,8 @@ const pages = [
 	"Vigenere Cipher",
 	"Playfair Cipher",
 	"Hill Cipher",
+	"AES Cipher",
+	"DES Cipher",
 ] as const;
 
 function App() {
@@ -53,26 +57,40 @@ function App() {
 						"Seed key starts the stream, then plaintext extends the running key tape.",
 					node: <AutokeyCipher />,
 				};
-		case "Vigenere Cipher":
-			return {
-				title: "Vigenere Cipher",
-				description:
-					"Repeat a keyword against plaintext and index into tabula recta per character.",
-				node: <VigenereCipher />,
-			};
-		case "Playfair Cipher":
-			return {
-				title: "Playfair Cipher",
-				description:
-					"Encrypt digraphs using a 5x5 keyword square with row, column, and rectangle rules.",
-				node: <PlayfairCipher />,
-			};
-		case "Hill Cipher":
+			case "Vigenere Cipher":
+				return {
+					title: "Vigenere Cipher",
+					description:
+						"Repeat a keyword against plaintext and index into tabula recta per character.",
+					node: <VigenereCipher />,
+				};
+			case "Playfair Cipher":
+				return {
+					title: "Playfair Cipher",
+					description:
+						"Encrypt digraphs using a 5x5 keyword square with row, column, and rectangle rules.",
+					node: <PlayfairCipher />,
+				};
+			case "Hill Cipher":
 				return {
 					title: "Hill Cipher",
 					description:
 						"Transform plaintext vectors using a 2x2 matrix under modulo 26 arithmetic.",
 					node: <HillCipher />,
+				};
+			case "AES Cipher":
+				return {
+					title: "AES-128 Cipher",
+					description:
+						"Visualize AES round states and key schedule for a single 16-byte block.",
+					node: <AesCipher />,
+				};
+			case "DES Cipher":
+				return {
+					title: "DES Cipher",
+					description:
+						"Explore the 16-round Feistel network and subkey schedule for a 64-bit block.",
+					node: <DesCipher />,
 				};
 			default:
 				return {
